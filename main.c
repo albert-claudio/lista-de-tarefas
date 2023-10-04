@@ -1,81 +1,72 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <locale.h>
 #include <stdbool.h>
+#include <locale.h>
 
-
-//DEIFININDO UMA ESTRUTURA DE TAREFA PARA RE
- struct Task {
-    char description [100];
-    char name [200];
+// Definindo uma estrutura para representar uma tarefa
+struct Task {
+    char name[100];
+    char description[200];
     bool completed;
-    int i;
- };
+};
 
- void addTask(struct Task tasks[], int *numTasks, const char *name, const char *description) {
-    if (*numTasks < 100){
-        strcpy(tasks[*numTasks].name, name);
-        strcpy(tasks[*numTasks].description, description);
+// Função para adicionar uma nova tarefa
+void addTask(struct Task tasks[], int *numTasks) {
+    if (*numTasks < 100) {
+        printf("Digite o nome da tarefa: ");
+        scanf("%s", tasks[*numTasks].name);
+
+        printf("Digite a descrição da tarefa: ");
+        scanf("%s", tasks[*numTasks].description);
+
         tasks[*numTasks].completed = false;
         (*numTasks)++;
-        printf("Tarefa adiconada com sucesso!\n");
-    }else{
-        printf("A lista esta cheia. Tire algo para esvaziar!\n");
+        printf("Tarefa adicionada com sucesso!\n");
+    } else {
+        printf("A lista de tarefas está cheia. Não é possível adicionar mais tarefas.\n");
     }
-
-
 }
-    
-//FUNÃ‡ÃƒO PARA MARCAR UMA TAREFA COMO CONCLUIDA E REMOVÃŠ-LA
-void completeTaks(struct Task tasks[], int *numTasks, int taksIndex) {
-    if (taksIndex >= 0 && taksIndex <*numTasks) {
-        tasks[taksIndex].completed = true;
-        printf("Tarefa '%s' marcada como concluÃ­da e removida da lista.\n", tasks[taksIndex].name);
 
-        //REMOVA A TAREFA MOVENDO AS TAREFAS RESTANTES PARA PREENCHER O ESPAÃ‡O VAZIO.
-        for (int i = taksIndex; i < *numTasks - 1; i++) {
+// Função para marcar uma tarefa como concluída e removê-la
+void completeTask(struct Task tasks[], int *numTasks, int taskIndex) {
+    if (taskIndex >= 0 && taskIndex < *numTasks) {
+        tasks[taskIndex].completed = true;
+        printf("Tarefa '%s' marcada como concluída e removida da lista.\n", tasks[taskIndex].name);
+
+        // Remova a tarefa movendo as tarefas restantes para preencher o espaço vazio.
+        for (int i = taskIndex; i < (*numTasks - 1); i++) {
             strcpy(tasks[i].name, tasks[i + 1].name);
             strcpy(tasks[i].description, tasks[i + 1].description);
             tasks[i].completed = tasks[i + 1].completed;
         }
+
         (*numTasks)--;
-    }else{
-        printf("Indice de tarefa inavalida.\n",);
+    } else {
+        printf("Índice de tarefa inválido.\n");
     }
-    
 }
 
-int main(){
+int main() {
     setlocale(LC_ALL, "portuguese");
+
     struct Task tasks[100];
     int numTasks = 0;
-    
-    //EXEMPLO DE COMO ADICIONAR TAREFAS
-    addTask(tasks, &numTasks, "Tarefa 1", "DescriÃ§Ã£o 1");
-    addTask(tasks, &numTasks, "Tarefa 2", "DescriÃ§Ã£o 2");
-    addTask(tasks, &numTasks, "Tarefa 3", "DescriÃ§Ã£o 3");
-    addTask(tasks, &numTasks, "Tarefa 4", "DescriÃ§Ã£o 4");
-    addTask(tasks, &numTasks, "Tarefa 5", "DescriÃ§Ã£o 5");
-    addTask(tasks, &numTasks, "Tarefa 6", "DescriÃ§Ã£o 6");
-    addTask(tasks, &numTasks, "Tarefa 7", "DescriÃ§Ã£o 7");
-    addTask(tasks, &numTasks, "Tarefa 8", "DescriÃ§Ã£o 8");
 
+    // Exemplo de como adicionar tarefas
+    addTask(tasks, &numTasks);
+    addTask(tasks, &numTasks);
 
-    //EXEMPLO DE COMO EXEBIR TAREFAS
+    // Exemplo de como exibir tarefas
     for (int i = 0; i < numTasks; i++) {
-        char foidaci[20] = tasks[i].completed? "Concluida" : "NÃ£o Concluida";
-        char karaio[20] = tasks[i].description;
-        char buceta[20] = tasks[i].name;
-        printf("Tarefa #%d:\n", );
-        printf("Nome: %s\n", buceta);
-        printf("DescriÃ§Ã£o: %s\n", karaio);
-        printf("Status: %s\n\n", foidaci);
+        printf("Tarefa #%d:\n", i + 1);
+        printf("Nome: %s\n", tasks[i].name);
+        printf("Descrição: %s\n", tasks[i].description);
+        printf("Status: %s\n", tasks[i].completed ? "Concluída" : "Não concluída");
     }
 
-    //EXEMPLO DE COMO MARCAR UMA TAREFA COMO CONCLUIDA E REMOVÃŠ-LA
-    completeTaks(tasks, &numTasks, 0); //MARCAR A PRIMEIRA TAREFA COMO CONCUÃDA
-
+    // Exemplo de como marcar uma tarefa como concluída e removê-la
+    completeTask(tasks, &numTasks, 0); // Marcar a primeira tarefa como concluída
 
     return 0;
-}   
+}
