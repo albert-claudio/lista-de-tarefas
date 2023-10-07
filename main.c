@@ -11,30 +11,30 @@ struct Task {
     bool completed;
 };
 
-// Função para adicionar uma nova tarefa
+// Funï¿½ï¿½o para adicionar uma nova tarefa
 void addTask(struct Task tasks[], int *numTasks) {
     if (*numTasks < 100) {
         printf("Digite o nome da tarefa: ");
         scanf("%s", tasks[*numTasks].name);
 
-        printf("Digite a descrição da tarefa: ");
+        printf("Digite a descriÃ§Ã£o da tarefa: ");
         scanf("%s", tasks[*numTasks].description);
 
         tasks[*numTasks].completed = false;
         (*numTasks)++;
         printf("Tarefa adicionada com sucesso!\n");
     } else {
-        printf("A lista de tarefas está cheia. Não é possível adicionar mais tarefas.\n");
+        printf("A lista de tarefas estÃ¡ cheia. NÃ£o Ã© possÃ­vel adicionar mais tarefas.\n");
     }
 }
 
-// Função para marcar uma tarefa como concluída e removê-la
+// FunÃ§Ã£oo para marcar uma tarefa como concluÃ­da e remove-la
 void completeTask(struct Task tasks[], int *numTasks, int taskIndex) {
     if (taskIndex >= 0 && taskIndex < *numTasks) {
         tasks[taskIndex].completed = true;
-        printf("Tarefa '%s' marcada como concluída e removida da lista.\n", tasks[taskIndex].name);
+        printf("Tarefa '%s' marcada como concluÃ­da e removida da lista.\n", tasks[taskIndex].name);
 
-        // Remova a tarefa movendo as tarefas restantes para preencher o espaço vazio.
+        // Remova a tarefa movendo as tarefas restantes para preencher o espaÃ§o vazio.
         for (int i = taskIndex; i < (*numTasks - 1); i++) {
             strcpy(tasks[i].name, tasks[i + 1].name);
             strcpy(tasks[i].description, tasks[i + 1].description);
@@ -43,7 +43,7 @@ void completeTask(struct Task tasks[], int *numTasks, int taskIndex) {
 
         (*numTasks)--;
     } else {
-        printf("Índice de tarefa inválido.\n");
+        printf("Ãndice de tarefa invÃ¡lido.\n");
     }
 }
 
@@ -53,20 +53,63 @@ int main() {
     struct Task tasks[100];
     int numTasks = 0;
 
-    // Exemplo de como adicionar tarefas
-    addTask(tasks, &numTasks);
-    addTask(tasks, &numTasks);
 
+    char continuar;
+    char entrada[100];
+
+    printf("1-\t Adicionar nova tarefa\n");
+    printf("2-\t Marcar tarefa como concluÃ­da\n");
+    printf("3-\t Sair\n");
+    
+    do {
+    
+    printf("Digite a opÃ§Ã£o desejada: ");
+    
+    // Ler a linha inteira, incluindo o caractere de quebra de linha
+    fgets(entrada, sizeof(entrada), stdin);
+
+    // Analisar a opÃ§Ã£o
+    sscanf(entrada, " %c", &continuar); 
+
+        switch (continuar) {
+            case '1':
+                addTask(tasks, &numTasks);
+                break;
+            case '2':
+                // LÃ³gica para marcar uma tarefa como concluÃ­da
+                printf("Tarefas disponoveis para marcaÃ§Ã£o:\n");
+                    for (int i = 0; i < numTasks; i++) {
+                printf("%d - %s\n", i, tasks[i].name);
+                }
+                printf("Digite o Ã­ndice da tarefa a ser marcada como concluÃ­da: ");
+                int indexToComplete;
+                scanf("%d", &indexToComplete);
+
+                if (indexToComplete >= 0 && indexToComplete < numTasks) {
+                    tasks[indexToComplete].completed = true;
+                printf("Tarefa '%s' marcada como concluÃ­da.\n", tasks[indexToComplete].name);
+            } else {
+                printf("Ãndice de tarefa invÃ¡lido.\n");
+        }
+                break;
+            case '3':
+                // Sair do loop
+                printf("Saindo do programa. Digite o nÃºmero trÃªs para ver a lista.\n");
+                break;
+            default:
+                printf("OpÃ§Ã£o invÃ¡lida. Tente novamente.\n");
+                break;
+        }
+        getchar();
+    } while (continuar != '3');
+    
     // Exemplo de como exibir tarefas
     for (int i = 0; i < numTasks; i++) {
         printf("Tarefa #%d:\n", i + 1);
         printf("Nome: %s\n", tasks[i].name);
-        printf("Descrição: %s\n", tasks[i].description);
-        printf("Status: %s\n", tasks[i].completed ? "Concluída" : "Não concluída");
-    }
-
-    // Exemplo de como marcar uma tarefa como concluída e removê-la
-    completeTask(tasks, &numTasks, 0); // Marcar a primeira tarefa como concluída
+        printf("DescriÃ§Ã£o: %s\n", tasks[i].description);
+        printf("Status: %s\n", tasks[i].completed ? "ConcluÃ­da" : "NÃ£o concluÃ­da");
+     }
 
     return 0;
 }
